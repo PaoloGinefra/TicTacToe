@@ -56,9 +56,9 @@ class Game extends React.Component {
   }
 
   handleClick(i){
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
+    let history = this.state.history.slice(0, this.state.stepNumber + 1);
+    let current = history[history.length - 1];
+    let squares = current.squares.slice();
     if(calculateWinner(squares) == null && squares[i] == null){
       squares[i] = current.xIsNext ? 'X' : 'O';
       this.setState({
@@ -106,8 +106,10 @@ class Game extends React.Component {
     let status;
     if(winner)
       status = 'Winner:\n' + winner;
-    else
+    else if(current.squares.includes(null))
       status = 'Next player:\n' + (current.xIsNext ? 'X' : 'O');
+    else
+      status = 'Draw';
 
     return (
       <div className="game">
@@ -151,4 +153,55 @@ function calculateWinner(squares) {
   }
   return null;
 }
-  
+ 
+function FreeSpots(squares){
+    var freeSpots = [];
+    squares.forEach((square, index) => {
+      if(square == null)
+        freeSpots.push(index);
+    });
+    return freeSpots;
+}
+
+function AiMove(squares, next = 1){
+  let freeSpots = FreeSpots(squares);
+  let winner = calculateWinner(squares);
+  let bestMove = 0;
+  if(freeSpots.length > 0 && winner == null){
+    let bestScore = -2;
+    for(let i = 0; i < freeSpots.length && bestScore < 1; i++){
+      const score = Score(squares, next, freeSpots[i]);
+      if(score * next > bestScore){
+          bestScore = score * next;
+          bestMove = freeSpots[i];
+      }
+    }
+  }
+  return bestMove;
+}
+
+function Score(squares, player, move, depth = 0){
+  squares[move] = player === 1 ? 'X' : 'O';
+  let freeSpots = FreeSpots(squares);
+  let winner = calculateWinner(squares);
+  let score;
+
+  if(winner){
+    score = winner;
+  }
+  else if(freeSpots.length === 0 || depth === 4){
+    score = -1;
+  }
+  else{
+    score = -2;
+    for(let i = 0; i < freeSpots.length && score < 1; i++){
+      const Lscore = Score(squares, -player, freeSpots[i], depth + 1);
+      if(Lscore * player > score){
+          score = Lscore;
+      }
+    }
+  }
+
+  squares[move] = null;
+  return score;
+}
