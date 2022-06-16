@@ -1,10 +1,17 @@
+:root{
+  --square-size: 10vw;
+}
+
 body {
-    font: 14px "Century Gothic", Futura, sans-serif;
+    font: 10px "Century Gothic", Futura, sans-serif;
     margin: 20px;
+    text-align: center;
+    background-color: rgb(15, 31, 46);
   }
-  
-  ol, ul {
-    padding-left: 30px;
+
+  .board-row{
+    display: flex;
+    justify-content: center;
   }
   
   .board-row:after {
@@ -13,39 +20,99 @@ body {
     display: table;
   }
   
-  .status {
-    margin-bottom: 10px;
-  }
-  
   .square {
     background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
+    border: 0px;
+    font-size: var(--square-size);
     font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
+    line-height: var(--square-size);
+    height: var(--square-size);
+    width: var(--square-size);
     text-align: center;
-    width: 34px;
+    margin: calc(0.1 * var(--square-size));
+    border-radius: 15%;
+    transition-duration: 0.5s;
   }
-  
-  .square:focus {
-    outline: none;
-  }
-  
-  .kbd-navigation .square:focus {
-    background: #ddd;
+
+  .square:hover{
+    transform: scale(1.1);
   }
   
   .game {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
   }
   
   .game-info {
-    margin-left: 20px;
+    text-align: center;
+    font-size: 6vh;
+    color: white;
+  }
+  .GoButtonsContainer{
+    margin: 0.6em;
   }
   
+  .GoButtonContainer{
+    margin: 0.5vh;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    transform: scale(0.8);
+  }
+
+  .GoButton{
+    border: none;
+    padding: 1vh;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
+    transition-duration: 0.4s;
+  }
+
+  .GoButton:hover{
+    transform: scale(1.1);
+  }
+
+  #current{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  .status{
+    margin: 0.5em;
+    font-size: calc(0.6 * var(--square-size));
+  }
+
+  .title{
+    color: white;
+    font-size: calc(1.5 * var(--square-size));
+    margin: 0;
+    animation: TitleAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.2vw;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(52, 74, 93); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+@keyframes TitleAnimation {
+  0%   {transform: scale(1);}
+  50%  {transform: scale(1.1);}
+  100% {transform: scale(1);}
+}
